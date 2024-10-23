@@ -24,7 +24,7 @@ Go语言实现企业微信sdk，a sensible Work Weixin SDK for Go。
 go get github.com/zsmhub/workweixin
 ```
 
-### 一键生成sdk代码命令(`需手动格式化代码`)
+### 一键生成sdk代码命令(`需手动格式化代码；企微页面调整后一键生成代码可能失效`)
 
 - 生成企微回调事件代码
 
