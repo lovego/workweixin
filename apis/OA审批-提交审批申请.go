@@ -73,11 +73,6 @@ type AttendanceValue struct { // 假勤组件-出差/外出/加班组件（contr
 	Type int `json:"type"` // 假勤组件类型：1-请假；3-出差；4-外出；5-加班
 }
 
-type Approver struct { // 审批流程信息，用于指定审批申请的审批流程，支持单人审批、多人会签、多人或签，可能有多个审批节点，仅use_template_approver为0时生效。
-	Attr   int      `json:"attr"`   // 节点审批方式：1-或签；2-会签，仅在节点为多人审批时有效
-	Userid []string `json:"userid"` // 审批节点审批人userid列表，若为多人会签、多人或签，需填写每个人的userid
-}
-
 type ApplyDataContent struct { // 审批申请详情，由多个表单控件及其内容组成，其中包含需要对控件赋值的信息
 	Control string `json:"control"` // 控件类型：Text-文本；Textarea-多行文本；Number-数字；Money-金额；Date-日期/日期+时间；Selector-单选/多选；；Contact-成员/部门；Tips-说明文字；File-附件；Table-明细；
 	Id      string `json:"id"`      // 控件id：控件的唯一id，可通过“获取审批模板详情”接口获取
@@ -99,25 +94,34 @@ type ApplyDataContent struct { // 审批申请详情，由多个表单控件及�
 type SummaryList struct { // 摘要信息，用于显示在审批通知卡片、审批列表的摘要信息，最多3行
 	SummaryInfo []SummaryInfo `json:"summary_info"`
 }
-
 type SummaryInfo struct { // 摘要行信息，用于定义某一行摘要显示的内容
 	Text string `json:"text"` // 摘要行显示文字，用于记录列表和消息通知的显示，不要超过20个字符
 	Lang string `json:"lang"` // 摘要行显示语言，中文：zh_CN（注意不是zh-CN），英文：en。
 }
 
+type ApplyData struct { // 审批申请数据，可定义审批申请中各个控件的值，其中必填项必须有值，选填项可为空，数据结构同“获取审批申请详情”接口返回值中同名参数“apply_data”
+	Contents []ApplyDataContent `json:"contents"` // 审批申请详情，由多个表单控件及其内容组成，其中包含需要对控件赋值的信息
+}
+
+type ApplyEventProcess struct {
+	NodeList []ApplyEventProcessNodeList `json:"node_list"`
+}
+type ApplyEventProcessNodeList struct {
+	Type   int      `json:"type"`
+	ApvRel int      `json:"apv_rel"`
+	Userid []string `json:"userid"`
+}
+
 // ReqApplyEvent 提交审批申请
 // 文档：https://developer.work.weixin.qq.com/document/path/92632#提交审批申请
 type ReqApplyEvent struct {
-	CreatorUserid       string     `json:"creator_userid"`        // 申请人userid，此审批申请将以此员工身份提交，申请人需在应用可见范围内
-	TemplateId          string     `json:"template_id"`           // 模板的唯一标识id。可在“获取审批单据详情”、“审批状态变化回调通知”中获得，也可在使用“复制/更新模板到企业”接口回调中获得。注：此id为企业内模板的实例id，非服务商后台对应模板的id。暂不支持通过接口提交[打卡补卡][调班]模板审批单。
-	UseTemplateApprover int        `json:"use_template_approver"` // 审批人模式：0-通过接口指定审批人、抄送人（此时approver、notifyer等参数可用）; 1-使用此模板在管理后台设置的审批流程，支持条件审批。
-	Approver            []Approver `json:"approver"`              // 审批流程信息，用于指定审批申请的审批流程，支持单人审批、多人会签、多人或签，可能有多个审批节点，仅use_template_approver为0时生效。
-	Notifyer            []string   `json:"notifyer"`              // 抄送人节点userid列表，仅use_template_approver为0时生效。
-	NotifyType          int        `json:"notify_type"`           // 抄送方式：1-提单时抄送（默认值）； 2-单据通过后抄送；3-提单和单据通过后抄送。仅use_template_approver为0时生效。
-	ApplyData           struct { // 审批申请数据，可定义审批申请中各个控件的值，其中必填项必须有值，选填项可为空，数据结构同“获取审批申请详情”接口返回值中同名参数“apply_data”
-		Contents []ApplyDataContent `json:"contents"` // 审批申请详情，由多个表单控件及其内容组成，其中包含需要对控件赋值的信息
-	} `json:"apply_data"`
-	SummaryList []SummaryList `json:"summary_list"` // 摘要信息，用于显示在审批通知卡片、审批列表的摘要信息，最多3行
+	CreatorUserid       string             `json:"creator_userid"`              // 申请人userid，此审批申请将以此员工身份提交，申请人需在应用可见范围内
+	TemplateId          string             `json:"template_id"`                 // 模板的唯一标识id。可在“获取审批单据详情”、“审批状态变化回调通知”中获得，也可在使用“复制/更新模板到企业”接口回调中获得。注：此id为企业内模板的实例id，非服务商后台对应模板的id。暂不支持通过接口提交[打卡补卡][调班]模板审批单。
+	UseTemplateApprover int                `json:"use_template_approver"`       // 审批人模式：0-通过接口指定审批人、抄送人（此时approver、notifyer等参数可用）; 1-使用此模板在管理后台设置的审批流程，支持条件审批。
+	ChooseDepartment    int                `json:"choose_department,omitempty"` // 提单者提单部门id，不填默认为主部门
+	ApplyData           ApplyData          `json:"apply_data"`                  // 审批申请数据，可定义审批申请中各个控件的值，其中必填项必须有值，选填项可为空，数据结构同“获取审批申请详情”接口返回值中同名参数“apply_data”
+	SummaryList         []SummaryList      `json:"summary_list"`                // 摘要信息，用于显示在审批通知卡片、审批列表的摘要信息，最多3行
+	Process             *ApplyEventProcess `json:"process,omitempty"`           // 新版流程列表，use_template_approver = 0 时必填
 }
 
 var _ bodyer = ReqApplyEvent{}

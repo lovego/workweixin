@@ -29,61 +29,73 @@ func (x ReqGetApprovalDetailOa) intoBody() ([]byte, error) {
 type RespGetApprovalDetailOa struct {
 	CommonResp
 	Info struct {
-		ApplyData struct {
-			Contents []struct {
-				Control string `json:"control"`
-				ID      string `json:"id"`
-				Title   []struct {
-					Lang string `json:"lang"`
-					// Text 文本内容，即申请人在此控件填写的文本内容
-					Text string `json:"text"`
-				} `json:"title"`
-				Value struct {
-					Children    []interface{} `json:"children"`    // 明细内容，一个明细控件可能包含多个子明细
-					Departments []interface{} `json:"departments"` // 部门内容，即申请人在此控件选择的部门，多选模式下可能有多个
-					Files       []interface{} `json:"files"`       // 文件内容，即申请人在此控件上传的文件内容，可能有多个
-					Members     []interface{} `json:"members"`     // 成员内容，即申请人在此控件选择的成员，多选模式下可能有多个
-					StatField   []interface{} `json:"stat_field"`
-					// Text 文本内容，即申请人在此控件填写的文本内容
-					Text string        `json:"text"`
-					Tips []interface{} `json:"tips"`
-				} `json:"value"`
-			} `json:"contents"`
-		} `json:"apply_data"`
-		ApplyTime int `json:"apply_time"`
-		Applyer   struct {
-			Partyid string `json:"partyid"`
+		SpNo       string `json:"sp_no"`
+		SpName     string `json:"sp_name"`
+		SpStatus   int    `json:"sp_status"`
+		TemplateId string `json:"template_id"`
+		ApplyTime  int    `json:"apply_time"`
+		Applyer    struct {
 			Userid  string `json:"userid"`
+			Partyid string `json:"partyid"`
 		} `json:"applyer"`
-		Comments []struct {
-			CommentUserInfo struct {
-				Userid string `json:"userid"`
-			} `json:"commentUserInfo"`
-			Commentcontent string   `json:"commentcontent"`
-			Commentid      string   `json:"commentid"`
-			Commenttime    int      `json:"commenttime"`
-			MediaID        []string `json:"media_id"`
-		} `json:"comments"`
-		Notifyer []struct {
-			Userid string `json:"userid"`
-		} `json:"notifyer"`
-		SpName   string `json:"sp_name"`
-		SpNo     string `json:"sp_no"`
 		SpRecord []struct {
+			SpStatus     int `json:"sp_status"`
 			Approverattr int `json:"approverattr"`
 			Details      []struct {
 				Approver struct {
 					Userid string `json:"userid"`
 				} `json:"approver"`
-				MediaID  []interface{} `json:"media_id"`
-				SpStatus int           `json:"sp_status"`
 				Speech   string        `json:"speech"`
+				SpStatus int           `json:"sp_status"`
 				Sptime   int           `json:"sptime"`
+				MediaId  []interface{} `json:"media_id"`
 			} `json:"details"`
-			SpStatus int `json:"sp_status"`
 		} `json:"sp_record"`
-		SpStatus   int    `json:"sp_status"`
-		TemplateID string `json:"template_id"`
+		Notifyer []struct {
+			Userid string `json:"userid"`
+		} `json:"notifyer"`
+		ApplyData struct {
+			Contents []struct {
+				Control string `json:"control"`
+				Id      string `json:"id"`
+				Title   []struct {
+					Text string `json:"text"`
+					Lang string `json:"lang"`
+				} `json:"title"`
+				Value struct {
+					Text        string        `json:"text"`
+					Tips        []interface{} `json:"tips"`
+					Members     []interface{} `json:"members"`
+					Departments []interface{} `json:"departments"`
+					Files       []interface{} `json:"files"`
+					Children    []interface{} `json:"children"`
+					StatField   []interface{} `json:"stat_field"`
+				} `json:"value"`
+			} `json:"contents"`
+		} `json:"apply_data"`
+		Comments []struct {
+			CommentUserInfo struct {
+				Userid string `json:"userid"`
+			} `json:"commentUserInfo"`
+			Commenttime    int      `json:"commenttime"`
+			Commentcontent string   `json:"commentcontent"`
+			Commentid      string   `json:"commentid"`
+			MediaId        []string `json:"media_id"`
+		} `json:"comments"`
+		ProcessList struct {
+			NodeList []struct {
+				NodeType    int `json:"node_type"`
+				SpStatus    int `json:"sp_status"`
+				ApvRel      int `json:"apv_rel"`
+				SubNodeList []struct {
+					Userid   string   `json:"userid"`
+					Speech   string   `json:"speech"`
+					SpYj     int      `json:"sp_yj"`
+					Sptime   int      `json:"sptime"`
+					MediaIds []string `json:"media_ids"`
+				} `json:"sub_node_list"`
+			} `json:"node_list"`
+		} `json:"process_list"`
 	} `json:"info"`
 }
 

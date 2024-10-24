@@ -10,11 +10,11 @@ import (
 // ReqSetoneuserquotaVacation 修改成员假期余额请求
 // 文档：https://developer.work.weixin.qq.com/document/path/94213#修改成员假期余额
 type ReqSetoneuserquotaVacation struct {
-	Leftduration int    `json:"leftduration"`
-	Remarks      string `json:"remarks"`
-	TimeAttr     int    `json:"time_attr"`
 	Userid       string `json:"userid"`
 	VacationID   int    `json:"vacation_id"`
+	Leftduration int    `json:"leftduration"`
+	TimeAttr     int    `json:"time_attr"`
+	Remarks      string `json:"remarks"`
 }
 
 var _ bodyer = ReqSetoneuserquotaVacation{}

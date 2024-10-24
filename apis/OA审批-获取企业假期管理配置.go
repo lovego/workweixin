@@ -33,16 +33,34 @@ func (x ReqGetcorpconfVacation) intoURLValues() url.Values {
 type RespGetcorpconfVacation struct {
 	CommonResp
 	Lists []struct {
-		DurationType   int    `json:"duration_type"`
-		ID             int    `json:"id"`
-		Name           string `json:"name"`
-		PerdayDuration int    `json:"perday_duration"`
-		QuotaAttr      struct {
-			AutoresetDuration int `json:"autoreset_duration"`
-			AutoresetTime     int `json:"autoreset_time"`
-			Type              int `json:"type"`
+		Id           int    `json:"id"`
+		Name         string `json:"name"`
+		TimeAttr     int    `json:"time_attr"`
+		DurationType int    `json:"duration_type"`
+		QuotaAttr    struct {
+			Type              int  `json:"type"`
+			AutoresetTime     int  `json:"autoreset_time"`
+			AutoresetDuration int  `json:"autoreset_duration"`
+			QuotaRuleType     int  `json:"quota_rule_type"`
+			AtEntryDate       bool `json:"at_entry_date"`
+			AutoResetMonthDay int  `json:"auto_reset_month_day"`
 		} `json:"quota_attr"`
-		TimeAttr int `json:"time_attr"`
+		PerdayDuration     int `json:"perday_duration"`
+		IsNewovertime      int `json:"is_newovertime"`
+		EnterCompTimeLimit int `json:"enter_comp_time_limit"`
+		ExpireRule         struct {
+			Type     int `json:"type"`
+			Duration int `json:"duration"`
+			Date     struct {
+				Month int `json:"month"`
+				Day   int `json:"day"`
+			} `json:"date"`
+			ExternDurationEnable bool `json:"extern_duration_enable"`
+			ExternDuration       struct {
+				Month int `json:"month"`
+				Day   int `json:"day"`
+			} `json:"extern_duration"`
+		} `json:"expire_rule"`
 	} `json:"lists"`
 }
 

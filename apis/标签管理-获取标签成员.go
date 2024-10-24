@@ -69,3 +69,36 @@ func (c *ApiClient) ExecGetTag(req ReqGetTag) (RespGetTag, error) {
 	}
 	return resp, nil
 }
+
+type T struct {
+	CreatorUserid       string `json:"creator_userid"`
+	TemplateId          string `json:"template_id"`
+	UseTemplateApprover int    `json:"use_template_approver"`
+	ChooseDepartment    int    `json:"choose_department"`
+	Process             struct {
+		NodeList []struct {
+			Type   int      `json:"type"`
+			ApvRel int      `json:"apv_rel"`
+			Userid []string `json:"userid"`
+		} `json:"node_list"`
+	} `json:"process"`
+	ApplyData struct {
+		Contents []struct {
+			Control string `json:"control"`
+			Id      string `json:"id"`
+			Title   []struct {
+				Text string `json:"text"`
+				Lang string `json:"lang"`
+			} `json:"title"`
+			Value struct {
+				Text string `json:"text"`
+			} `json:"value"`
+		} `json:"contents"`
+	} `json:"apply_data"`
+	SummaryList []struct {
+		SummaryInfo []struct {
+			Text string `json:"text"`
+			Lang string `json:"lang"`
+		} `json:"summary_info"`
+	} `json:"summary_list"`
+}

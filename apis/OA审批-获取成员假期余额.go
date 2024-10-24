@@ -28,11 +28,12 @@ func (x ReqGetuservacationquotaVacation) intoBody() ([]byte, error) {
 type RespGetuservacationquotaVacation struct {
 	CommonResp
 	Lists []struct {
-		Assignduration int    `json:"assignduration"`
-		ID             int    `json:"id"`
-		Leftduration   int    `json:"leftduration"`
-		Usedduration   int    `json:"usedduration"`
-		Vacationname   string `json:"vacationname"`
+		ID                 int    `json:"id"`
+		Assignduration     int    `json:"assignduration"`
+		Usedduration       int    `json:"usedduration"`
+		Leftduration       int    `json:"leftduration"`
+		Vacationname       string `json:"vacationname"`
+		RealAssignduration int    `json:"real_assignduration"`
 	} `json:"lists"`
 }
 
