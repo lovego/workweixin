@@ -3,9 +3,10 @@ package workweixin
 import (
 	"errors"
 	"fmt"
-	"github.com/zsmhub/workweixin/apis"
-	"github.com/zsmhub/workweixin/callbacks"
 	"sync"
+
+	"github.com/lovego/workweixin/apis"
+	"github.com/lovego/workweixin/callbacks"
 )
 
 // sdk 调用入口

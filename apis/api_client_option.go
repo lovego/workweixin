@@ -1,10 +1,11 @@
 package apis
 
 import (
-	"github.com/valyala/fasthttp"
 	"log"
 	"net"
 	"time"
+
+	"github.com/valyala/fasthttp"
 )
 
 // DefaultQYAPIHost 默认企业微信 API Host

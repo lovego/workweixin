@@ -2,12 +2,13 @@ package apis
 
 import (
 	"bytes"
-	"github.com/google/uuid"
 	"io"
 	"mime/multipart"
 	"net/url"
 	"os"
 	"path"
+
+	"github.com/google/uuid"
 )
 
 const mediaFieldName = "media"

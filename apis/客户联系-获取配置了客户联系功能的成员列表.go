@@ -8,7 +8,6 @@ import (
 // 自动生成的文件, 生成方式: make api doc=微信文档地址url
 // 可自行修改生成的文件,以满足开发需求
 
-
 // ReqGetFollowUserListExternalcontact 获取配置了客户联系功能的成员列表请求
 // 文档：https://developer.work.weixin.qq.com/document/path/92576#获取配置了客户联系功能的成员列表
 type ReqGetFollowUserListExternalcontact struct{}
@@ -26,7 +25,6 @@ func (x ReqGetFollowUserListExternalcontact) intoURLValues() url.Values {
 	}
 	return ret
 }
-
 
 // RespGetFollowUserListExternalcontact 获取配置了客户联系功能的成员列表响应
 // 文档：https://developer.work.weixin.qq.com/document/path/92576#获取配置了客户联系功能的成员列表

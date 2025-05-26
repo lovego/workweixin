@@ -5,13 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/valyala/fasthttp"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"net/url"
 	"sync"
 	"time"
+
+	"github.com/valyala/fasthttp"
 )
 
 // 标识
