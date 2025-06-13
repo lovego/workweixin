@@ -51,7 +51,8 @@ type ApiClient struct {
 	dcsSuiteTicketCacheKey string            // suite_ticket 缓存key，企微每十分钟更新一次
 	dcsAppSuiteTicket      DcsAppSuiteTicket // 分布式app_suite_ticket
 
-	ThirdAppClient *ApiClient // 第三方应用client，用于授权企业API客户端获取suite_access_token，目前用于第三方应用获取企业凭证接口
+	ThirdAppClient *ApiClient       // 第三方应用client，用于授权企业API客户端获取suite_access_token，目前用于第三方应用获取企业凭证接口
+	FasthttpClient *fasthttp.Client // 支持当前Client调用企业微信接口的自定义fasthttp.Client
 
 	logger Logger
 }
@@ -274,7 +275,7 @@ func (c *ApiClient) executeWXApiGet(path string, req urlValuer, objResp interfac
 	httpReq.SetRequestURI(urlStr)
 	httpReq.Header.SetMethod(http.MethodGet)
 
-	if err := FastClient.DoTimeout(httpReq, httpResp, HttpTTL); err != nil {
+	if err := c.fasthttpClient().DoTimeout(httpReq, httpResp, HttpTTL); err != nil {
 		return err
 	}
 
@@ -316,7 +317,7 @@ func (c *ApiClient) executeWXApiPost(path string, req bodyer, objResp interface{
 	httpReq.SetBody(reqBody)
 	httpReq.Header.SetMethod(http.MethodPost)
 
-	if err := FastClient.DoTimeout(httpReq, httpResp, HttpTTL); err != nil {
+	if err := c.fasthttpClient().DoTimeout(httpReq, httpResp, HttpTTL); err != nil {
 		return err
 	}
 
@@ -375,7 +376,7 @@ func (c *ApiClient) executeWXApiMediaUpload(path string, req mediaUploader, objR
 	httpReq.SetBody(bodyBufer.Bytes())
 	httpReq.Header.SetMethod(http.MethodPost)
 
-	if err := FastClient.DoTimeout(httpReq, httpResp, HttpTTL); err != nil {
+	if err := c.fasthttpClient().DoTimeout(httpReq, httpResp, HttpTTL); err != nil {
 		return err
 	}
 
@@ -395,4 +396,11 @@ func (c *ApiClient) executeWXApiMediaUpload(path string, req mediaUploader, objR
 	}()
 
 	return json.Unmarshal(respBody, &objResp)
+}
+
+func (c *ApiClient) fasthttpClient() *fasthttp.Client {
+	if c.FasthttpClient != nil {
+		return c.FasthttpClient
+	}
+	return FastClient
 }
