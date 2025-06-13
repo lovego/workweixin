@@ -20,6 +20,7 @@ const (
 	Provider      = "provider"       // 第三方服务商
 	ThirdApp      = "third_app"      // 第三方应用
 	CustomizedApp = "customized_app" // 自建应用代开发
+	SelfApp       = "self_app"       // 自建应用
 )
 
 // 分布式app_suite_ticket：获取和设置suite_ticket的值，自行实现该接口的具体逻辑，比如使用redis方案【企微服务器每十分钟推送一次suite_ticket】
@@ -196,6 +197,31 @@ func NewCustomizedAuthCorpApiClient(corpId, companyPermanentCode string, AgentId
 	}
 
 	c.accessToken.setGetTokenFunc(c.getCustomizedAuthCorpToken)
+
+	return &c
+}
+
+// 自建应用API客户端初始化
+func NewSelfApiClient(corpId string, agentId int, secret string, opts Options) *ApiClient {
+	accessTokenName := "access_token"
+	c := ApiClient{
+		CorpId:             corpId,
+		CorpProviderSecret: secret,
+		AgentId:            agentId,
+		accessTokenName:    accessTokenName,
+		accessToken: &token{
+			mutex:         &sync.RWMutex{},
+			dcsToken:      opts.DcsToken,
+			tokenCacheKey: fmt.Sprintf("%s#%s#%s#%d", SelfApp, accessTokenName, corpId, agentId),
+		},
+		logger: opts.Logger,
+	}
+
+	if c.logger == nil {
+		c.logger = loggerPrint{}
+	}
+
+	c.accessToken.setGetTokenFunc(c.getCorpToken)
 
 	return &c
 }
