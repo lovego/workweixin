@@ -220,6 +220,20 @@ func (s *sdk) GetSelfAuthCorpApiClient(corpId string) (*apis.ApiClient, error) {
 	return nil, fmt.Errorf("自建应用：corpid不存在：%s", corpId)
 }
 
+// 自建应用：移除授权企业
+func (s *sdk) RemoveSelfAuthCorp(corpId string) {
+	apiClient, err := s.GetSelfAuthCorpApiClient(corpId)
+	if err != nil {
+		return
+	}
+
+	apiClient.RemoveToken()
+
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+	delete(s.SelfAuthCorpsClient, corpId)
+}
+
 // 第三方小程序：设置第三方小程序回调token和加密key (如果要处理微信回调, 这一步是必须的)
 func (s *sdk) NewThirdMiniCallbackHandler(token, encodingAESKey string) error {
 	if token == "" || encodingAESKey == "" {
